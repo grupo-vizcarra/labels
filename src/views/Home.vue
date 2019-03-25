@@ -23,10 +23,11 @@
                          <v-divider></v-divider>
                          <v-container fluid>
                               <v-switch 
-                                   v-model="innerpack"
+                                   v-model="ipack"
+                                   :value="innerpack"
                                    color="info"
-                                   label="Piezas por caja" 
-                                   :value="true"
+                                   label="Piezas por caja"
+                                   @change="setIpack"
                               >
                               </v-switch>
                          </v-container>
@@ -54,65 +55,7 @@
                ================================================================
           -->
                     <v-container fluid grid-list-sm id="mainwrapper">
-                         <v-layout row wrap>
-                              <v-flex v-if="labels.length==0">
-                                   <h1>No has agregado etiquetas</h1>
-                              </v-flex>
-                              <v-flex v-for="(label, index) in labels" :key="index">
-                                   <v-card
-                                        class="mx-auto"
-                                        :class="{_green:label.type=='std'||label.type=='my',_orange:label.type=='off',label}"
-                                   >
-                                        <v-card-title>
-                                             <v-list-tile-avatar color="grey darken-3">
-                                                  <v-img class="elevation-3"
-                                                       src="https://cdn4.iconfinder.com/data/icons/product-management-flat-icons/270/Product_Box-512.png"
-                                                  ></v-img>
-                                             </v-list-tile-avatar>
-
-                                             <v-list-tile-content>
-                                                  <v-list-tile-title class="headline font-weight-bold">{{ label.scode }}</v-list-tile-title>
-                                             </v-list-tile-content>
-
-                                             <v-spacer></v-spacer>
-
-                                             <v-list-tile-content>
-                                                  <v-btn fab dark small color="error">
-                                                       <v-icon dark>close</v-icon>
-                                                  </v-btn>
-                                             </v-list-tile-content>
-                                        </v-card-title>
-
-                                        <div class="txt_a_c headline font-weight-light">
-                                             {{ label.item }}
-                                        </div>
-                                        <div class="txt_a_c" v-if="innerpack">
-                                             {{ label.ipack }} pzs
-                                        </div>
-
-                                        <v-card-text>
-                                             <div class="txt_a_c" v-if="label.type=='off'">
-                                                  <div class="title"> {{ label.prices[0].labprint }}</div>
-                                                  <div class="display-3 font-weight-bold"> {{ label.prices[0].price }}</div>
-                                             </div>
-
-                                             <div class="txt_a_c" v-if="label.type=='my'">
-                                                  <div class="title"> {{ label.prices[0].labprint }}</div>
-                                                  <div class="display-3 font-weight-bold"> {{ label.prices[0].price }}</div>
-                                             </div>
-
-                                             <div v-if="label.type=='std'">
-                                                  <table border="0" width="50%" style="margin:0 auto;">
-                                                       <tr v-for="(prices, index) in label.prices" :key="index">
-                                                            <td><h2>{{ prices.labprint }}</h2></td>
-                                                            <td><h2>{{ prices.price }}</h2></td>
-                                                       </tr>
-                                                  </table>
-                                             </div>
-                                        </v-card-text>
-                                   </v-card>
-                              </v-flex>
-                         </v-layout>
+                         <Labels />
                     </v-container>
 
           <!-- 
@@ -158,142 +101,45 @@
                ================================================================
           -->
                <v-footer color="white" class="white--text" app>
-                    <div class="finder" fixed fluid>
-                         <v-form>
-                              <v-layout row>
-                                   <v-flex xs12 lg3>
-                                        <v-text-field
-                                             outline
-                                             :label="labelforsearch"
-                                             @focus="helpForSearch(true)"
-                                             @blur="helpForSearch(false)"
-                                             :type="typefieldsearch"
-                                             v-model="ipttocreatelabel"
-                                             id="ipttocreatelabel"
-                                             prepend-icon="art_track"
-                                             hint="..."
-                                        >
-                                        </v-text-field>
-                                   </v-flex>
-
-                                   <v-flex>
-                                        <v-btn
-                                             id="btntglkeyboard"
-                                             flat icon @click="toggleKeyboardType()"
-                                             :class="{keyboard_active: keyboardtype}"
-                                        >
-                                             <v-icon>spellcheck</v-icon>
-                                        </v-btn>
-                                   </v-flex>
-                              </v-layout>
-                         </v-form>
-                    </div>
+                    <LabFinder/>
                </v-footer>
      </div>
 </template>
 
 <script>
 
+import Labels from '@/components/LabelsComp.vue'
+import LabFinder from '@/components/LabFinderComp.vue'
+import {mapState, mapMutations} from 'vuex' 
+
 export default {
      props:{ source:String },
+     components:{Labels,LabFinder},
      data(){
           return {
                drawer: false,
                drawerRight: false,
                right: null,
                left: null,
+
+               ipack:false,
                labelsprint:'greens',
                printer:'',
-               ipttocreatelabel:'',
-               typefieldsearch:'number',
-               keyboardtype:false,
-               innerpack:true,
                priceLists:[
                     {"id":1,"name":"Mayoreo","labelprint":"MAY"},
                     {"id":2,"name":"Menudeo","labelprint":"MEN"},
                     {"id":3,"name":"Docena","labelprint":"DOC"},
                     {"id":4,"name":"Caja","labelprint":"CAJ"}
                ],
-               useprices:[1,2,3],
-               labels:[
-                    {
-                         "type":"std",// articulo standard
-                         "tool":false,//con carrito?
-                         "item":"LP-5678",
-                         "ipack":18,
-                         "scode":"56923",
-                         prices:[
-                              {"idlist":1,"labprint":"MAY","price":225},
-                              {"idlist":2,"labprint":"MEN","price":230},
-                              {"idlist":3,"labprint":"DOC","price":235}
-                         ]
-                    },
-                    {
-                         "type":"std",// articulo standard
-                         "tool":false,//con carrito?
-                         "item":"LP-5678",
-                         "ipack":18,
-                         "scode":"56923",
-                         prices:[
-                              {"idlist":1,"labprint":"MAY","price":225},
-                              {"idlist":3,"labprint":"DOC","price":235}
-                         ]
-                    },
-                    {
-                         "type":"my",// articulo de mayoreo
-                         "tool":'C',//con carrito?
-                         "item":"LP-5678",
-                         "ipack":18,
-                         "scode":"56923",
-                         prices:[{"idlist":null,"labprint":"MAYOREO","price":230}]
-                    },
-
-                    {
-                         "type":"my",// articulo de mayoreo
-                         "tool":'CC',//con carrito?
-                         "item":"LP-5678",
-                         "ipack":18,
-                         "scode":"56923",
-                         prices:[{"idlist":null,"labprint":"MAYOREO","price":230}]
-                    },
-
-                    {
-                         "type":"my",// articulo de mayoreo
-                         "tool":false,//con carrito?
-                         "item":"LP-5678",
-                         "ipack":18,
-                         "scode":"56923",
-                         prices:[{"idlist":null,"labprint":"MAYOREO","price":230}]
-                    },
-                    {
-                         "type":"off",// el articulo es oferta
-                         "tool":false,//con carrito?
-                         "item":"MOC-9632",
-                         "ipack":18,
-                         "scode":"56923",
-                         prices:[{"idlist":null,"labprint":"OFERTA","price":230}]
-                    }
-               ],
-               labelforsearch:'Generar etiqueta'
+               useprices:[1,2,3]
           }
      },
-     methods:{
-          helpForSearch(op){
-               let text = op ? 'Ingrese codigo o codigo corto' : 'Generar etiqueta';
-               this.labelforsearch = text;
-          },
-          toggleKeyboardType(){
-               this.keyboardtype = !this.keyboardtype
-
-               if(this.keyboardtype){
-                    this.typefieldsearch = 'text';
-               }else{
-                    this.typefieldsearch = 'number';
-               }
-
-               document.getElementById("ipttocreatelabel").focus();
-          }
-     }
+     computed: {
+          ...mapState(['innerpack'])
+     },
+     methods: {
+          ...mapMutations(['setIpack'])
+     },
 }
 </script>
 
