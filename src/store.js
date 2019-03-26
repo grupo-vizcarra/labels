@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { get } from 'http';
 
 Vue.use(Vuex)
 
@@ -9,7 +10,7 @@ export default new Vuex.Store({
           labels:[
                {
                     "type":"std",// articulo standard
-                    "tool":false,//con carrito?
+                    "tool":true,//con carrito?
                     "item":"LP-5678",
                     "ipack":18,
                     "scode":"56923",
@@ -64,17 +65,18 @@ export default new Vuex.Store({
                     "scode":"56923",
                     prices:[{"idlist":null,"labprint":"OFERTA","price":230}]
                }
-          ]
+          ],
+          pricelists:[
+               {"id":1,"name":"Mayoreo","labelprint":"MAY"},
+               {"id":2,"name":"Menudeo","labelprint":"MEN"},
+               {"id":3,"name":"Docena","labelprint":"DOC"},
+               {"id":4,"name":"Caja","labelprint":"CAJ"}
+          ],
+          usepriceslists:[1,2,3]
      },
      mutations: {
-          addLabel(state,data){
-               state.labels.push(data)
-          },
-          setIpack(state,val){
-               state.innerpack = val
-          }
-     },
-     actions: {
-
+          addLabel(state,data){ state.labels.push(data)},
+          setUseIpack(state,val){ state.innerpack = val},
+          setPriceListsUse(state,pricesuse){ state.usepriceslists = pricesuse}
      }
 })

@@ -6,32 +6,7 @@
                ================================================================
           -->
                <v-navigation-drawer fixed v-model="drawer" clipped app >
-                    <v-list subheader three-line >
-                         <v-subheader>Precios</v-subheader>
-                         <v-container fluid>
-                              <p><small>Seleccione los precios que desea agregar a las etiquetas</small></p>
-                              <v-switch 
-                                   v-for="pricelist in priceLists" :key="pricelist.id" 
-                                   v-model="useprices"
-                                   color="success"
-                                   :label="'['+pricelist.labelprint+'] '+pricelist.name" 
-                                   :value="pricelist.id"
-                              >
-                              </v-switch>
-                         </v-container>
-
-                         <v-divider></v-divider>
-                         <v-container fluid>
-                              <v-switch 
-                                   v-model="ipack"
-                                   :value="innerpack"
-                                   color="info"
-                                   label="Piezas por caja"
-                                   @change="setIpack"
-                              >
-                              </v-switch>
-                         </v-container>
-                    </v-list>
+                    <MenuLeft/>
                </v-navigation-drawer>
                <!-- SEGUNO OVERLAY, LADO IZQUIERDO -->
                <!-- <v-navigation-drawer temporary v-model="left" fixed >ovrlay 2 left side</v-navigation-drawer> -->
@@ -110,11 +85,11 @@
 
 import Labels from '@/components/LabelsComp.vue'
 import LabFinder from '@/components/LabFinderComp.vue'
-import {mapState, mapMutations} from 'vuex' 
+import MenuLeft from '@/components/MenuLeftComp.vue'
 
 export default {
      props:{ source:String },
-     components:{Labels,LabFinder},
+     components:{Labels,LabFinder,MenuLeft},
      data(){
           return {
                drawer: false,
@@ -122,24 +97,10 @@ export default {
                right: null,
                left: null,
 
-               ipack:false,
                labelsprint:'greens',
-               printer:'',
-               priceLists:[
-                    {"id":1,"name":"Mayoreo","labelprint":"MAY"},
-                    {"id":2,"name":"Menudeo","labelprint":"MEN"},
-                    {"id":3,"name":"Docena","labelprint":"DOC"},
-                    {"id":4,"name":"Caja","labelprint":"CAJ"}
-               ],
-               useprices:[1,2,3]
+               printer:''
           }
-     },
-     computed: {
-          ...mapState(['innerpack'])
-     },
-     methods: {
-          ...mapMutations(['setIpack'])
-     },
+     }
 }
 </script>
 
