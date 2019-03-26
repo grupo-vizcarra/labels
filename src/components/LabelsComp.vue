@@ -65,6 +65,8 @@
 import {mapState,mapMutations} from 'vuex' 
 export default {
      name:'LabelsBody',
+     mounted(){console.log('Compnente Labels montado')},
+     created(){console.log('Compnente Labels creado')},
      computed: {
           ...mapState(['labels','innerpack','prices'])
      },

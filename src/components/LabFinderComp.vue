@@ -34,9 +34,13 @@
 <script>
 
 import {mapState, mapMutations} from 'vuex'
+import LabelsAPI from '@/services/api/Labels.js'
+import PrintersAPI from '@/services/api/Printers.js'
 
 export default {
      name: 'LabFinder',
+     mounted(){console.log('Compnente LebFinder montado')},
+     created(){console.log('Compnente LebFinder creado')},
      data(){
           return {
                msgHint:'...',
@@ -68,19 +72,29 @@ export default {
           searchItem(){
                // this.msgHint = 'Buscando '+this.$store.state.finder.item+', espere...';
 
-               let newLabel = {
-                    "type":"std",// articulo standard
-                    "tool":false,//con carrito?
-                    "item":"ML52-63",
-                    "ipack":18,
-                    "scode":"36252",
-                    prices:[
-                         {"idlist":1,"labprint":"MAY","price":550},
-                         {"idlist":3,"labprint":"DOC","price":575}
-                    ]
-               };
+               if(this.$store.state.finder.item!=""){
+                    this.msgHint = 'Buscando '+this.$store.state.finder.item;
+                    PrintersAPI.all().then(printers => {
+                         consol.log(printers);
 
-               this.$store.commit('addLabel',newLabel);
+                         let newLabel = {
+                              "type":"std",// articulo standard
+                              "tool":false,//con carrito?
+                              "item":"ML52-63",
+                              "ipack":18,
+                              "scode":"36252",
+                              prices:[
+                                   {"idlist":1,"labprint":"MAY","price":550},
+                                   {"idlist":3,"labprint":"DOC","price":575}
+                              ]
+                         };
+
+                         // this.$store.commit('addLabel',newLabel);
+                         this.msgHint = 'Listo papu!!!';
+                    });
+               }else{
+                    this.msgHint = 'El campo no puede estar vacio';
+               }
           }
      }
 }
