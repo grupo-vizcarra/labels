@@ -1,6 +1,6 @@
 <template>
      <div class="finder" fixed fluid>
-          <v-form>
+          <v-form @submit.stop.prevent>
                <v-layout row>
                     <v-flex xs12 lg3>
                          <v-text-field
@@ -9,10 +9,11 @@
                               @focus="helpForSearch(true)"
                               @blur="helpForSearch(false)"
                               :type="typefieldsearch"
-                              v-model="ipttocreatelabel"
+                              v-model="finder.item"
                               id="ipttocreatelabel"
                               prepend-icon="art_track"
-                              hint="..."
+                              :hint="msgHint"
+                              @keyup.enter="searchItem"
                          >
                          </v-text-field>
                     </v-flex>
@@ -31,17 +32,24 @@
      </div>
 </template>
 <script>
+
+import {mapState, mapMutations} from 'vuex'
+
 export default {
      name: 'LabFinder',
      data(){
           return {
-               ipttocreatelabel:'',
+               msgHint:'...',
                typefieldsearch:'number',
                keyboardtype:false,
                labelforsearch:'Generar etiqueta'
           }
      },
+     computed: {
+          ...mapState(['finder'])
+     },
      methods:{
+          ...mapMutations(['addLabel']),
           helpForSearch(op){
                let text = op ? 'Ingrese codigo o codigo corto' : 'Generar etiqueta';
                this.labelforsearch = text;
@@ -56,6 +64,23 @@ export default {
                }
 
                document.getElementById("ipttocreatelabel").focus();
+          },
+          searchItem(){
+               // this.msgHint = 'Buscando '+this.$store.state.finder.item+', espere...';
+
+               let newLabel = {
+                    "type":"std",// articulo standard
+                    "tool":false,//con carrito?
+                    "item":"ML52-63",
+                    "ipack":18,
+                    "scode":"36252",
+                    prices:[
+                         {"idlist":1,"labprint":"MAY","price":550},
+                         {"idlist":3,"labprint":"DOC","price":575}
+                    ]
+               };
+
+               this.$store.commit('addLabel',newLabel);
           }
      }
 }

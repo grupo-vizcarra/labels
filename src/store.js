@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
      state: {
           innerpack:false,
+          finder:{item:''},
           labels:[
                {
                     "type":"std",// articulo standard
@@ -86,6 +87,11 @@ export default new Vuex.Store({
                if(state.prices.ids.length==0){
                     state.prices.use = false
                }
+          }
+     },
+     actions:{
+          addLabel(context,data){
+               context.commit('addLabel',data);
           }
      }
 })
