@@ -22,7 +22,7 @@
                          <v-spacer></v-spacer>
 
                          <v-list-tile-content>
-                              <v-btn fab dark small color="error">
+                              <v-btn fab dark small color="error" @click="removeLabel(index)">
                                    <v-icon dark>close</v-icon>
                               </v-btn>
                          </v-list-tile-content>
@@ -35,7 +35,7 @@
                          {{ label.ipack }} pzs
                     </div>
 
-                    <v-card-text>
+                    <v-card-text v-if="prices.use">
                          <div class="txt_a_c" v-if="label.type=='off'">
                               <div class="title"> {{ label.prices[0].labprint }}</div>
                               <div class="display-3 font-weight-bold"> {{ label.prices[0].price }}</div>
@@ -66,10 +66,10 @@ import {mapState,mapMutations} from 'vuex'
 export default {
      name:'LabelsBody',
      computed: {
-          ...mapState(['labels','innerpack'])
+          ...mapState(['labels','innerpack','prices'])
      },
      methods: {
-          ...mapMutations(['addLabel'])
+          ...mapMutations(['addLabel','removeLabel'])
      }
 
 }

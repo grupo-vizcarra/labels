@@ -66,17 +66,26 @@ export default new Vuex.Store({
                     prices:[{"idlist":null,"labprint":"OFERTA","price":230}]
                }
           ],
+          prices:{
+               use:true,
+               ids:[1,2,3]
+          },
           pricelists:[
                {"id":1,"name":"Mayoreo","labelprint":"MAY"},
                {"id":2,"name":"Menudeo","labelprint":"MEN"},
                {"id":3,"name":"Docena","labelprint":"DOC"},
                {"id":4,"name":"Caja","labelprint":"CAJ"}
-          ],
-          usepriceslists:[1,2,3]
+          ]
      },
      mutations: {
           addLabel(state,data){ state.labels.push(data)},
+          removeLabel(state,idx){ state.labels.splice(idx,1)},
           setUseIpack(state,val){ state.innerpack = val},
-          setPriceListsUse(state,pricesuse){ state.usepriceslists = pricesuse}
+          setPriceListsUse(state,ids){
+               state.prices.ids = ids
+               if(state.prices.ids.length==0){
+                    state.prices.use = false
+               }
+          }
      }
 })

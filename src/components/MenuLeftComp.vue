@@ -1,11 +1,18 @@
 <template>
      <v-list subheader three-line >
-          <v-subheader>Precios</v-subheader>
-          <v-container fluid>
+          <v-subheader>
+               <v-switch
+                    v-model="prices.use"
+                    color="info"
+                    label="Precios"
+               >
+               </v-switch>
+          </v-subheader>
+          <v-container fluid v-if="prices.use">
                <p><small>Seleccione los precios que desea agregar a las etiquetas</small></p>
                <v-switch 
                     v-for="pricelist in pricelists" :key="pricelist.id" 
-                    v-model="usepriceslists"
+                    v-model="prices.ids"
                     color="success"
                     :label="'['+pricelist.labelprint+'] '+pricelist.name" 
                     :value="pricelist.id"
@@ -18,7 +25,6 @@
           <v-container fluid>
                <v-switch 
                     v-model="innerpack"
-                    :value="innerpack"
                     color="info"
                     label="Piezas por caja"
                     @change="setUseIpack"
@@ -38,7 +44,7 @@ export default {
           return{}
      },
      computed: {
-          ...mapState(['innerpack','pricelists','usepriceslists'])
+          ...mapState(['innerpack','pricelists','prices'])
      },
      methods: {
           ...mapMutations(['setUseIpack','setPriceListsUse'])
