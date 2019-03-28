@@ -9,7 +9,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios';
 
 
-axios.defaults.baseURL = 'ruta'
+axios.defaults.baseURL = 'http://192.168.1.176:1618/api_labels/public'
 
 Vue.use(VueAxios,axios)
 Vue.config.productionTip = false

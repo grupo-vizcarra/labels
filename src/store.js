@@ -24,6 +24,9 @@ export default new Vuex.Store({
                if(state.prices.ids.length==0){
                     state.prices.use = false
                }
+          },
+          truncateLabels(state){
+               if(confirm("Eliminar todas las etiqutas?")){ state.labels = []; }
           }
      },
      actions:{

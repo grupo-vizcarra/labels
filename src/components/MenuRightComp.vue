@@ -25,6 +25,12 @@
           </v-container>
 
           <v-divider></v-divider>
+
+          <v-subheader>Pagina</v-subheader>
+          
+          <v-container fluid v-if="labels.length!=0">
+               <v-btn color="error" @click="truncateLabels"><v-icon>delete_forever</v-icon></v-btn>
+          </v-container>
      </v-list>
 </template>
 
@@ -41,10 +47,10 @@ export default {
           }
      },
      computed: {
-          ...mapState(['print','labstoprint'])
+          ...mapState(['print','labstoprint','labels'])
      },
      methods: {
-          ...mapMutations(['setLabsToPrint']),
+          ...mapMutations(['setLabsToPrint','truncateLabels']),
           printing(){
                if(this.$store.state.labels.length>0){
 
