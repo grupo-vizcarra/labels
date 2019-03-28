@@ -8,7 +8,8 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios';
 
-axios.defaults.baseURL = 'http://192.168.1.74/Etiquetas/public'
+// axios.defaults.baseURL = 'http://192.168.1.74/Etiquetas/public'
+axios.defaults.baseURL = 'http://192.168.1.176:1618/api_labels/public'
 
 Vue.use(VueAxios,axios)
 Vue.config.productionTip = false

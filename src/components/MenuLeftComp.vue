@@ -38,18 +38,9 @@
 
 <script>
 import {mapState, mapMutations} from 'vuex' 
-import PriceListsAPI from '@/services/api/PriceLists.js'
 
 export default {
      name:'MenuLeft',
-     mounted(){console.log('Compnente MenuLeft montado')},
-     created(){
-          PriceListsAPI.all().then(pricelists => {
-               this.$store.state.pricelists = pricelists;
-               console.log("Listas de precios montadas");
-               console.log(pricelists);
-          })
-     },
      data(){
           return{}
      },

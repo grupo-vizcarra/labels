@@ -8,31 +8,17 @@ export default new Vuex.Store({
      state: {
           innerpack:false,
           finder:{item:''},
-          labels:[
-               {
-                    "type":"std",// articulo standard
-                    "tool":true,//con carrito?
-                    "item":"LP-5678",
-                    "ipack":18,
-                    "scode":"56923",
-                    prices:[
-                         {"idlist":1,"labprint":"MAY","price":225},
-                         {"idlist":2,"labprint":"MEN","price":230},
-                         {"idlist":3,"labprint":"DOC","price":235}
-                    ]
-               }
-          ],
-          prices:{
-               use:true,
-               ids:[1,2,3]
-          },
+          labels:[],
+          labstoprint:'green',
+          prices:{ use:true, ids:[1,2,3] },
           pricelists:[],
-          printers:[]
+          print:{ devices:[], selected:''}
      },
      mutations: {
-          addLabel(state,data){ state.labels.push(data); this.state.finder.item = '';},
+          addLabel(state,data){ state.labels.unshift(data);},
           removeLabel(state,idx){ state.labels.splice(idx,1)},
           setUseIpack(state,val){ state.innerpack = val},
+          setLabsToPrint(state,val){state.labstoprint=val},
           setPriceListsUse(state,ids){
                state.prices.ids = ids
                if(state.prices.ids.length==0){
@@ -41,8 +27,6 @@ export default new Vuex.Store({
           }
      },
      actions:{
-          addLabel(context,data){
-               context.commit('addLabel',data);
-          }
+          addLabel(context,data){ context.commit('addLabel',data); }
      }
 })

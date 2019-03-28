@@ -18,7 +18,7 @@
           -->
                <v-toolbar color="purple" dark fixed app clipped-right >
                     <v-btn flat icon color="white" @click.stop="drawer = !drawer"> <v-icon>settings</v-icon> </v-btn>
-                    <span>Grupo Vizcarra | Etiquetas</span>
+                    <span>Grupo Vizcarra | Etiquetas ({{labels.length}})</span>
                     <v-spacer></v-spacer>
                     <!-- <v-toolbar-side-icon @click.stop="drawerRight = !drawerRight"></v-toolbar-side-icon> -->
                     <v-btn flat icon color="white" @click.stop="drawerRight = !drawerRight"> <v-icon>menu</v-icon> </v-btn>
@@ -45,26 +45,7 @@
                               <v-list-tile-content> <v-list-tile-title>Columna fija derecha</v-list-tile-title> </v-list-tile-content>
                          </v-list-tile>
                     </v-list> -->
-                    <v-list subheader three-line >
-                         <v-subheader>Imprimir</v-subheader>
-                         <v-container fluid>
-                              <p><small>Seleccione las etiquetas a imprimir</small></p>
-                              <v-radio-group v-model="labelsprint" row>
-                                   <v-radio color="info" label="Estandard" value="greens"></v-radio>
-                                   <v-radio color="info" label="Ofertas" value="orange"></v-radio>
-                              </v-radio-group>
-
-                              <p><small>Seleccione impresora</small></p>
-                              <v-radio-group v-model="printer" column>
-                                   <v-radio color="info" label="Ventas" value="printer1"></v-radio>
-                                   <v-radio color="info" label="Ventas 2" value="printer2"></v-radio>
-                                   <v-radio color="info" label="Bodega" value="printer3"></v-radio>
-                              </v-radio-group>
-                              <v-btn color="success"><v-icon>local_printshop</v-icon></v-btn>
-                         </v-container>
-
-                         <v-divider></v-divider>
-                    </v-list>
+                    <MenuRight/>
                </v-navigation-drawer>
                
                <!-- SEGUNO OVERLAY, LADO DERECHO -->
@@ -86,29 +67,51 @@
 import Labels from '@/components/LabelsComp.vue'
 import LabFinder from '@/components/LabFinderComp.vue'
 import MenuLeft from '@/components/MenuLeftComp.vue'
+import MenuRight from '@/components/MenuRightComp.vue'
+
+import PriceListsAPI from '@/services/api/PriceLists.js'
+import PrintersAPI from '@/services/api/Printers.js'
+
+import {mapState} from 'vuex'
 
 export default {
      props:{ source:String },
-     components:{Labels,LabFinder,MenuLeft},
+     components:{Labels,LabFinder,MenuLeft,MenuRight},
      data(){
           return {
-               drawer: false,
-               drawerRight: false,
-               right: null,
-               left: null,
-
-               labelsprint:'greens',
-               printer:''
+               drawer: false, drawerRight: false,
+               right: null, left: null
           }
+     },
+     created(){
+          PriceListsAPI.all().then(pricelists => {
+               this.$store.state.pricelists = pricelists;
+               console.log("Listas de precios montadas");
+               console.log(pricelists);
+
+               PrintersAPI.all().then(printers => {
+                    this.$store.state.print.devices = printers;
+                    console.log("Impresoras montadas");
+                    console.log(printers);
+               });
+          }).catch(error => {
+               alert(error);
+          });
+     },
+     mounted() {
+          console.log('Componente Home montado');
+     },
+     computed: {
+          ...mapState(['labels'])
      }
 }
 </script>
 
 <style lang="scss">
-     .see{ border:4px solid red; }
-     .see2{ border:2px dashed blue; }
-     .see3{ border:2px dotted green; }
-     .see4{ border:4px solid red; }
+     // .see{ border:4px solid red; }
+     // .see2{ border:2px dashed blue; }
+     // .see3{ border:2px dotted green; }
+     // .see4{ border:4px solid red; }
 
      ._green{  background: rgba(#00b894,.8) !important; }
      ._orange{  background: rgba(#e17055,.8) !important; }
@@ -116,9 +119,7 @@ export default {
      #mainwrapper{
           padding-bottom: 75px !important;
 
-          .txt_a_c{
-               text-align: center;
-          }
+          .txt_a_c{ text-align: center; }
      }
 
      .v-footer{

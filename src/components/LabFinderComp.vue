@@ -35,7 +35,6 @@
 
 import {mapState, mapMutations} from 'vuex'
 import LabelsAPI from '@/services/api/Labels.js'
-import PrintersAPI from '@/services/api/Printers.js'
 
 export default {
      name: 'LabFinder',
@@ -46,7 +45,8 @@ export default {
                msgHint:'...',
                typefieldsearch:'number',
                keyboardtype:false,
-               labelforsearch:'Generar etiqueta'
+               labelforsearch:'Generar etiqueta',
+               txtdisab:false
           }
      },
      computed: {
@@ -55,7 +55,16 @@ export default {
      methods:{
           ...mapMutations(['addLabel']),
           helpForSearch(op){
-               let text = op ? 'Ingrese codigo o codigo corto' : 'Generar etiqueta';
+
+               let text;
+               text = 'Generar etiqueta';
+               this.msgHint = '';
+
+               if(op){
+                    text = 'Ingrese codigo o codigo corto';
+                    this.msgHint = '...';
+               }
+               
                this.labelforsearch = text;
           },
           toggleKeyboardType(){
@@ -67,30 +76,51 @@ export default {
                     this.typefieldsearch = 'number';
                }
 
-               document.getElementById("ipttocreatelabel").focus();
+               setTimeout(function(){
+                    document.getElementById("ipttocreatelabel").focus();
+               },100);
+
           },
           searchItem(){
                // this.msgHint = 'Buscando '+this.$store.state.finder.item+', espere...';
+               this.txtdisab=true;
 
-               if(this.$store.state.finder.item!=""){
-                    this.msgHint = 'Buscando '+this.$store.state.finder.item;
-                    PrintersAPI.all().then(printers => {
-                         consol.log(printers);
+               let codetosearch = this.$store.state.finder.item;
 
-                         let newLabel = {
-                              "type":"std",// articulo standard
-                              "tool":false,//con carrito?
-                              "item":"ML52-63",
-                              "ipack":18,
-                              "scode":"36252",
-                              prices:[
-                                   {"idlist":1,"labprint":"MAY","price":550},
-                                   {"idlist":3,"labprint":"DOC","price":575}
-                              ]
-                         };
+               if(codetosearch!=""&&this.txtdisab){
+                    this.msgHint = 'Buscando '+codetosearch;
 
-                         // this.$store.commit('addLabel',newLabel);
-                         this.msgHint = 'Listo papu!!!';
+                    let target = {
+                         product:codetosearch,
+                         price_id:this.$store.state.prices.ids
+                    };
+
+                    console.log(target);
+                    LabelsAPI.tryGenerate(target).then(datalabel => {
+                         console.log(datalabel);
+
+                         this.$store.commit('addLabel',datalabel);
+                         this.msgHint = datalabel.item+' agregada';
+
+                         this.$store.state.finder.item = '';
+                         this.txtdisab=false;
+                    }).catch(error=>{
+                         console.log(error);
+                         switch(error.response.status){
+                              case 404: 
+                                   // alert(codetosearch+' no existe');
+                                   this.msgHint = codetosearch+' no existe';
+                              break;
+                              case 405:
+                                   // alert("La extension de accesorio no es valida");
+                                   this.msgHint = "La extension de accesorio no es valida";
+                              break;
+
+                              case 406:
+                                   // alert("Selecciona al menos 2 precios");
+                                   this.msgHint = "Selecciona al menos 2 precios";
+                              break;
+                         }
                     });
                }else{
                     this.msgHint = 'El campo no puede estar vacio';
