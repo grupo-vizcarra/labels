@@ -38,7 +38,7 @@
                =============== C O L U M N A  F I J A  D E R. =================
                ================================================================
           -->
-               <v-navigation-drawer fixed v-model="drawerRight" right clipped app >
+               <v-navigation-drawer fixed v-model="drawerRight" right clipped app>
                     <!-- <v-list dense>
                          <v-list-tile @click.stop="right = !right">
                               <v-list-tile-action> <v-icon>exit_to_app</v-icon> </v-list-tile-action>
@@ -56,7 +56,7 @@
                ========================= F O O T E R ==========================
                ================================================================
           -->
-               <v-footer color="white" class="white--text" app>
+               <v-footer class="white--text" app>
                     <LabFinder/>
                </v-footer>
      </div>
@@ -108,10 +108,10 @@ export default {
 </script>
 
 <style lang="scss">
-     // .see{ border:4px solid red; }
-     // .see2{ border:2px dashed blue; }
-     // .see3{ border:2px dotted green; }
-     // .see4{ border:4px solid red; }
+     .see{ border:4px solid red; }
+     .see2{ border:2px dashed blue; }
+     .see3{ border:6px dotted green; }
+     .see4{ border:4px solid red; }
 
      ._green{  background: rgba(#00b894,.8) !important; }
      ._orange{  background: rgba(#e17055,.8) !important; }
@@ -124,9 +124,8 @@ export default {
 
      .v-footer{
           height: auto!important;
-          border-top:2px solid purple !important;
-          background: rgba(#fff,.95)!important;
-          // border:4px solid greenyellow!important;
+          border-top:1px solid rgba(0,0,0,0.12) !important;
+          background: rgba(#fff,.95)!important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 
           .finder{
                padding: 5px;
