@@ -15,7 +15,10 @@ export default new Vuex.Store({
           print:{ devices:[], selected:''}
      },
      mutations: {
-          addLabel(state,data){ state.labels.unshift(data);},
+          addLabel(state,data){ 
+               state.labels.unshift(data);
+               localStorage.setItem("labels",JSON.stringify(state.labels));
+          },
           removeLabel(state,idx){ state.labels.splice(idx,1)},
           setUseIpack(state,val){ state.innerpack = val},
           setLabsToPrint(state,val){state.labstoprint=val},
@@ -26,7 +29,10 @@ export default new Vuex.Store({
                }
           },
           truncateLabels(state){
-               if(confirm("Eliminar todas las etiqutas?")){ state.labels = []; }
+               if(confirm("Eliminar todas las etiqutas?")){ 
+                    state.labels = [];
+                    localStorage.removeItem("labels");
+               }
           }
      },
      actions:{
