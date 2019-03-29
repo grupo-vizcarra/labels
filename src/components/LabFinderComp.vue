@@ -95,7 +95,8 @@ export default {
 
                     let target = {
                          product:codetosearch,
-                         price_id:this.$store.state.prices.ids
+                         price_id:this.$store.state.prices.ids,
+                         isPrice :this.$store.state.prices.use
                     };
 
                     console.log(target);
