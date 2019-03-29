@@ -59,16 +59,20 @@ export default {
                     let labelsToSend = [];
                     let txtshow='';
 
-                    switch(this.$store.state.labstoprint){
-                         case 'green':
-                              labelsToSend = this.$store.state.labels.filter(label => label.type!="off");
-                              txtshow = 'estandard';
-                         break;
+                    if(!this.$store.state.prices.use){
+                         labelsToSend = this.$store.state.labels;
+                    }else{
+                         switch(this.$store.state.labstoprint){
+                              case 'green':
+                                   labelsToSend = this.$store.state.labels.filter(label => label.type!="off");
+                                   txtshow = 'estandard';
+                              break;
 
-                         case 'orange':
-                              labelsToSend = this.$store.state.labels.filter(label => label.type=="off");
-                              txtshow = 'ofertas';
-                         break;
+                              case 'orange':
+                                   labelsToSend = this.$store.state.labels.filter(label => label.type=="off");
+                                   txtshow = 'ofertas';
+                              break;
+                         }
                     }
 
                     let dataprint = {
