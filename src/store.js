@@ -19,7 +19,10 @@ export default new Vuex.Store({
                state.labels.unshift(data);
                localStorage.setItem("labels",JSON.stringify(state.labels));
           },
-          removeLabel(state,idx){ state.labels.splice(idx,1)},
+          removeLabel(state,idx){ 
+               state.labels.splice(idx,1);
+               localStorage.setItem("labels",JSON.stringify(state.labels));
+          },
           setUseIpack(state,val){ state.innerpack = val},
           setLabsToPrint(state,val){state.labstoprint=val},
           setPriceListsUse(state,ids){
