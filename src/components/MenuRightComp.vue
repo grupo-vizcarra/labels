@@ -7,7 +7,7 @@
           </v-container>
           <v-container fluid v-else>
                <p><small>Etiquetas a imprimir</small></p>
-               <v-radio-group @change="setLabsToPrint" v-model="labstoprint" row>
+               <v-radio-group @change="setLabsToPrint" v-model="labstoprint" row :disabled="!prices.use">
                     <v-radio color="info" label="Estandard" value="green"></v-radio>
                     <v-radio color="info" label="Ofertas" value="orange"></v-radio>
                </v-radio-group>
@@ -47,7 +47,7 @@ export default {
           }
      },
      computed: {
-          ...mapState(['print','labstoprint','labels'])
+          ...mapState(['print','labstoprint','labels','prices'])
      },
      methods: {
           ...mapMutations(['setLabsToPrint','truncateLabels']),
