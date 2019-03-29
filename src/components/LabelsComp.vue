@@ -16,7 +16,7 @@
                          </v-list-tile-avatar>
 
                          <v-list-tile-content>
-                              <v-list-tile-title class="headline font-weight-bold">{{ label.scode }}</v-list-tile-title>
+                              <v-list-tile-title class="headline font-weight-bold">{{prices.use ? label.scode : label.item }}</v-list-tile-title>
                          </v-list-tile-content>
 
                          <v-spacer></v-spacer>
@@ -29,7 +29,7 @@
                     </v-card-title>
 
                     <div class="txt_a_c headline font-weight-light">
-                         {{ label.item }}
+                         {{prices.use ? label.item : label.scode}}
                     </div>
                     <div class="txt_a_c" v-if="innerpack">
                          {{ label.ipack }} pzs
