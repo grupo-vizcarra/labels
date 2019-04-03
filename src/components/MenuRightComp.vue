@@ -64,12 +64,12 @@ export default {
                     }else{
                          switch(this.$store.state.labstoprint){
                               case 'green':
-                                   labelsToSend = this.$store.state.labels.filter(label => label.type!="off");
+                                   labelsToSend = this.$store.getters.labsStd;
                                    txtshow = 'estandard';
                               break;
 
                               case 'orange':
-                                   labelsToSend = this.$store.state.labels.filter(label => label.type=="off");
+                                   labelsToSend = this.$store.getters.labsOff;
                                    txtshow = 'ofertas';
                               break;
                          }
@@ -82,14 +82,16 @@ export default {
                          "printer" :this.$store.state.print.selected
                     }
 
-                    LabelsAPI.tryPrint(dataprint).then(resp =>{
-                         console.log(resp);
-                         this.btnload=false;
-                         this.btndis=false;
-                         alert("Etiquetas "+txtshow+" enviadas :)");
-                    }).catch(error => {
-                         console.log(error);
-                    })
+                    console.log(dataprint);
+
+                    // LabelsAPI.tryPrint(dataprint).then(resp =>{
+                    //      console.log(resp);
+                    //      this.btnload=false;
+                    //      this.btndis=false;
+                    //      alert("Etiquetas "+txtshow+" enviadas :)");
+                    // }).catch(error => {
+                    //      console.log(error);
+                    // })
                }else{alert("Primero agrega algunas etiquetas");}
           }
      },

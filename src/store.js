@@ -38,6 +38,10 @@ export default new Vuex.Store({
                }
           }
      },
+     getters:{
+          labsStd(state){ return state.labels.filter(label => label.type!="off") },
+          labsOff(state){ return state.labels.filter(label => label.type=="off") },
+     },
      actions:{
           addLabel(context,data){ context.commit('addLabel',data); }
      }
