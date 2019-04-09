@@ -10,31 +10,21 @@
                                    class="mx-auto"
                                    :class="{_green:label.type=='std'||label.type=='my',_orange:label.type=='off',label}"
                               >
-                                   <v-img
+                                   <v-card-actions>
+                                        <v-btn fab dark small color="error" @click="removeLabel(index)">
+                                             <v-icon dark>close</v-icon>
+                                        </v-btn>
+                                   </v-card-actions>
+                                   <!-- <v-img
                                         :src="'http://tablero.grupovizcarra.net:2222/gvresources/imgproducts/'+label.item+'.jpg'"
                                         height="100px"
                                    >
-                                             <v-layout row class="see">
-                                                  <v-flex class="see"> 
-                                                       <p class="display-1">
-                                                            {{prices.use ? label.scode : label.item }}
-                                                       </p>
-                                                  </v-flex>
-                                                  <v-flex class="see">
-                                                       <v-btn fab dark small color="error" @click="removeLabel(index)">
-                                                            <v-icon dark>close</v-icon>
-                                                       </v-btn>
-                                                  </v-flex>
-                                             </v-layout>
-                                   </v-img>
+                                   </v-img> -->
 
                                    <v-card-text>
-                                        <div class="txt_a_c headline font-weight-bold">
-                                             {{prices.use ? label.item : label.scode}}
-                                        </div>
-                                        <div class="txt_a_c" v-if="innerpack">
-                                             {{ label.ipack }} pzs
-                                        </div>
+                                        <p class="txt_a_c display-2 font-weight-bold"> {{prices.use ? label.scode : label.item }}<br> </p>
+                                        <p class="txt_a_c headline font-weight-bold"> {{prices.use ? label.item : label.scode}} </p>
+                                        <p class="txt_a_c" v-if="innerpack"> {{ label.ipack }} pzs  </p>
                                    </v-card-text>
 
                                    <v-card-text v-if="prices.use">
