@@ -1,35 +1,14 @@
 <template>
      <v-list subheader three-line>
-          <v-subheader>Impresion</v-subheader>
-          
-          <v-container fluid v-if="print.devices.length==0">
-               <span>No hay impresoras disponibles</span>
-          </v-container>
-          <v-container fluid v-else>
-               <p><small>Etiquetas a imprimir</small></p>
-               <v-radio-group @change="setLabsToPrint" v-model="labstoprint" row :disabled="!prices.use">
-                    <v-radio color="info" label="Estandard" value="green"></v-radio>
-                    <v-radio color="info" label="Ofertas" value="orange"></v-radio>
-               </v-radio-group>
-
-               <p><small>Impresora</small></p>
-               <v-radio-group v-model="print.selected" column>
-                    <v-radio 
-                         v-for="(printer, index) in print.devices" :key="index" 
-                         color="info" 
-                         :label="printer.print_name" 
-                         :value="printer.print_name">
-                    </v-radio>
-               </v-radio-group>
-               <v-btn color="info" :loading="btnload" :disabled="btndis" v-if="print.selected!=''" @click="printing"><v-icon>local_printshop</v-icon></v-btn>
-          </v-container>
-
-          <v-divider></v-divider>
-
           <v-subheader>Pagina</v-subheader>
           
           <v-container fluid v-if="labels.length!=0">
-               <v-btn color="error" @click="truncateLabels"><v-icon>delete_forever</v-icon></v-btn>
+               <v-btn color="error" @click="truncateLabels" :disabled="btndis"><v-icon>delete_forever</v-icon></v-btn>
+               <v-btn color="info" @click="exportLabels" :loading="btnexport" :disabled="btndis"><v-icon>cloud_download</v-icon></v-btn>
+          </v-container>
+
+          <v-container fluid v-else>
+               <p>agregue algunas etiquetas...</p>
           </v-container>
      </v-list>
 </template>
@@ -37,12 +16,14 @@
 <script>
 import {mapState, mapMutations} from 'vuex'
 import LabelsAPI from '@/services/api/Labels.js'
+import { setTimeout } from 'timers';
 
 export default {
      name:'MenuRight',
      data(){
           return {
                btnload:false,
+               btnexport:false,
                btndis:false
           }
      },
@@ -50,7 +31,35 @@ export default {
           ...mapState(['print','labstoprint','labels','prices'])
      },
      methods: {
-          ...mapMutations(['setLabsToPrint','truncateLabels']),
+          ...mapMutations(['truncateLabels']),
+          exportLabels(){
+               if(this.$store.state.labels.length>0){
+                    this.btnexport = true
+                    this.btndis = true
+
+                    let dataprint = {
+                         "tickets" :this.$store.state.labels,
+                         "isPrice" :this.$store.state.prices.use,
+                         "isPack" :this.$store.state.innerpack
+                    }
+
+                    console.log(dataprint);
+                    setTimeout(function(){
+                         window.location='http://ponce.inter.edu/cai/bv/Ana_Frank-Diario.pdf';
+                         this.btnexport = false
+                         this.btndis = false
+                    },2000);
+
+                    LabelsAPI.createPDF(dataprint).then(resp =>{
+                         console.log(resp);
+                         this.btnload=false;
+                         this.btndis=false;
+                         alert("Etiquetas "+txtshow+" enviadas :)");
+                    }).catch(error => {
+                         console.log(error);
+                    })
+               }
+          },
           printing(){
                if(this.$store.state.labels.length>0){
 

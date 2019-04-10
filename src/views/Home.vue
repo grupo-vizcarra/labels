@@ -89,17 +89,17 @@ export default {
                console.log("Listas de precios montadas");
                console.log(pricelists);
 
-               PrintersAPI.all().then(printers => {
-                    this.$store.state.print.devices = printers;
-                    console.log("Impresoras montadas");
-                    console.log(printers);
+               // PrintersAPI.all().then(printers => {
+               //      this.$store.state.print.devices = printers;
+               //      console.log("Impresoras montadas");
+               //      console.log(printers);
 
-                    let labelsstorage = JSON.parse(localStorage.getItem("labels"));
-                    // console.log(labelsstorage);
-                    if(labelsstorage!=null){
-                         this.$store.state.labels = labelsstorage;
-                    }
-               });
+               //      let labelsstorage = JSON.parse(localStorage.getItem("labels"));
+               //      // console.log(labelsstorage);
+               //      if(labelsstorage!=null){
+               //           this.$store.state.labels = labelsstorage;
+               //      }
+               // });
           }).catch(error => {
                alert(error);
           });
