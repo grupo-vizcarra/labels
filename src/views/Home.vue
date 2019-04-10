@@ -93,13 +93,11 @@ export default {
                //      this.$store.state.print.devices = printers;
                //      console.log("Impresoras montadas");
                //      console.log(printers);
-
-               //      let labelsstorage = JSON.parse(localStorage.getItem("labels"));
-               //      // console.log(labelsstorage);
-               //      if(labelsstorage!=null){
-               //           this.$store.state.labels = labelsstorage;
-               //      }
                // });
+
+               let labelsstorage = JSON.parse(localStorage.getItem("labels"));
+                    // console.log(labelsstorage);
+               if(labelsstorage!=null){ this.$store.state.labels = labelsstorage; }
           }).catch(error => {
                alert(error);
           });

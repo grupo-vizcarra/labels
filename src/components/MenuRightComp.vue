@@ -3,13 +3,15 @@
           <v-subheader>Pagina</v-subheader>
           
           <v-container fluid v-if="labels.length!=0">
-               <v-btn color="error" @click="truncateLabels" :disabled="btndis"><v-icon>delete_forever</v-icon></v-btn>
                <v-btn color="info" @click="exportLabels" :loading="btnexport" :disabled="btndis"><v-icon>cloud_download</v-icon></v-btn>
+               <v-btn color="error" @click="truncateLabels" :disabled="btndis"><v-icon>delete_forever</v-icon></v-btn>
           </v-container>
 
           <v-container fluid v-else>
                <p>agregue algunas etiquetas...</p>
           </v-container>
+
+          <v-divider></v-divider>
      </v-list>
 </template>
 
@@ -43,18 +45,18 @@ export default {
                          "isPack" :this.$store.state.innerpack
                     }
 
-                    console.log(dataprint);
-                    setTimeout(function(){
-                         window.location='http://ponce.inter.edu/cai/bv/Ana_Frank-Diario.pdf';
-                         this.btnexport = false
-                         this.btndis = false
-                    },2000);
-
                     LabelsAPI.createPDF(dataprint).then(resp =>{
                          console.log(resp);
                          this.btnload=false;
+                         this.btnexport=false;
                          this.btndis=false;
-                         alert("Etiquetas "+txtshow+" enviadas :)");
+                         if(this.$store.state.prices.use){
+                              alert("Hojas verdes: "+resp.std+", Hojas Naranjas: "+resp.off);
+                         }else{
+                              let sust = resp.hojas == 1 ? 'hoja' : 'hojas'; 
+                              alert("Ingrese "+resp.hojas+" "+sust);
+                         }
+                         window.open('http://192.168.1.176:1618/api_labels/files/'+resp.archivo);
                     }).catch(error => {
                          console.log(error);
                     })
